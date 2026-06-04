@@ -1,0 +1,27 @@
+name: deploy
+
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy to ec2
+      uses: appleboa/ssh-action@v1.0.3
+
+      with:
+        host: ${{secrets.ec2_host}}
+        username: ${{secrets.ec2_user}}
+        key: ${{secrets.ec2_sshkey}}
+
+        
+        script: |
+            cd ~/test-repo
+            git pull origin main
+            sudo cp app/index.html /var/www/html/index.html
+            sudo systemctl reload nginx
