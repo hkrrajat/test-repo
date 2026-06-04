@@ -1,26 +1,24 @@
-name: deploy
-
+name: Deploy to EC2
 
 on:
   push:
     branches:
       - main
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: deploy to ec2
-      uses: appleboa/ssh-action@v1.0.3
+      - name: Deploy application
+        uses: appleboy/ssh-action@v1.0.3
 
-      with:
-        host: ${{secrets.ec2_host}}
-        username: ${{secrets.ec2_user}}
-        key: ${{secrets.ec2_sshkey}}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSHKEY }}
 
-        
-        script: |
+          script: |
             cd ~/test-repo
             git pull origin main
             sudo cp app/index.html /var/www/html/index.html
